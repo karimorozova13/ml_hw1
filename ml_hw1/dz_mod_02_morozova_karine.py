@@ -22,7 +22,23 @@ df_cleaned = data[~outlier_indices]
 target = df_cleaned['MedHouseVal']
 
 # %%
-df_cleaned = df_cleaned.drop(columns=['MedHouseVal', 'AveBedrms'])
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+corr_mtx  =df_cleaned.drop(columns=['Latitude', 'Longitude']).corr()
+
+fig, ax = plt.subplots(figsize=(7,6))
+sns.heatmap(corr_mtx, 
+            cmap='coolwarm',
+            center=0,
+            annot=True,
+            fmt='.2f',
+            linewidth=0.5,
+            square=True,
+            ax=ax)
+
+# %%
+df_cleaned = df_cleaned.drop(columns=['MedHouseVal', 'AveRooms'])
 
 # %%
 from sklearn.model_selection import train_test_split
