@@ -16,21 +16,13 @@ outliers = df_zscore.apply(lambda x: (x < -3) | (x > 3))
 outlier_indices = outliers.any(axis=1)
 
 # %%
-data_cleaned = data[~outlier_indices]
-
-# %%
-df_cleaned = data_cleaned.drop(columns=['AveRooms'])
+df_cleaned = data[~outlier_indices]
 
 # %%
 target = df_cleaned['MedHouseVal']
 
 # %%
-df_cleaned = df_cleaned.drop(columns=['MedHouseVal'])
-
-# %%
-columns_drop = ['Longitude', 'Latitude','MedHouseVal']
-
-df_cleaned = df_cleaned.drop(columns=columns_drop)
+df_cleaned = df_cleaned.drop(columns=['MedHouseVal', 'AveBedrms'])
 
 # %%
 from sklearn.model_selection import train_test_split
@@ -59,8 +51,6 @@ y_pred = model.predict(X_test_scaled)
 ymin, ymax = y_train.agg(['min', 'max']).values
 
 y_pred = pd.Series(y_pred, index=X_test_scaled.index).clip(ymin, ymax)
-
-print(y_pred.head())
 
 # %%
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
